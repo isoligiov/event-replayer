@@ -7,7 +7,7 @@ from event import decode_hid_event, replay_event
 
 load_dotenv()
 
-RELAY_SERVER_APP_NAME = os.environ['RELAY_SERVER_APP_NAME']
+APP_NAME = os.environ['APP_NAME']
 
 def on_message(ws, message):
     hid_event = decode_hid_event(message)
@@ -21,7 +21,7 @@ def on_close(ws, close_status_code, close_msg):
 
 def on_open(ws):
     print("Opened connection")
-    ws.send_text(f'dest/{RELAY_SERVER_APP_NAME}')
+    ws.send_text(f'dest/{APP_NAME}')
 
 if __name__ == "__main__":
     websocket.enableTrace(False)
