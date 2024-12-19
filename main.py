@@ -8,6 +8,7 @@ from event import decode_hid_event, replay_event
 
 load_dotenv()
 
+ws = None
 APP_NAME = os.environ['APP_NAME']
 
 def on_message(ws, message):
@@ -29,6 +30,7 @@ def on_open(ws):
     ws.send_text(f'dest/{APP_NAME}')
 
 def reconnect():
+    global ws
     ws = websocket.WebSocketApp(f"wss://streamlineanalytics.net:10010",
                               on_open=on_open,
                               on_message=on_message,
