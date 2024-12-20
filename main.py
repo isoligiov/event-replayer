@@ -8,7 +8,6 @@ from event import decode_hid_event, replay_event
 
 load_dotenv()
 
-ws = None
 APP_NAME = os.environ['APP_NAME']
 
 def on_message(ws, message):
@@ -37,7 +36,7 @@ def reconnect():
                               on_error=on_error,
                               on_close=on_close)
 
-    ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE}, dispatcher=rel, reconnect=5)
+    ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE}, dispatcher=rel, reconnect=5, ping_interval=10)
 
 if __name__ == "__main__":
     websocket.enableTrace(False)
