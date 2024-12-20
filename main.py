@@ -2,7 +2,6 @@ import websocket
 import ssl
 import rel
 import os
-import time
 from dotenv import load_dotenv
 from event import decode_hid_event, replay_event
 
@@ -16,20 +15,16 @@ def on_message(ws, message):
 
 def on_error(ws, error):
     print(error)
-    time.sleep(5)
-    reconnect()
 
 def on_close(ws, close_status_code, close_msg):
     print("### closed ###")
-    time.sleep(5)
-    reconnect()
 
 def on_open(ws):
     print("Opened connection")
     ws.send_text(f'dest/{APP_NAME}')
 
-def reconnect():
-    global ws
+if __name__ == "__main__":
+    websocket.enableTrace(False)
     ws = websocket.WebSocketApp(f"wss://streamlineanalytics.net:10010",
                               on_open=on_open,
                               on_message=on_message,
@@ -38,8 +33,5 @@ def reconnect():
 
     ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE}, dispatcher=rel, reconnect=5, ping_interval=10)
 
-if __name__ == "__main__":
-    websocket.enableTrace(False)
-    reconnect()
     rel.signal(2, rel.abort)  # Keyboard Interrupt
     rel.dispatch()
